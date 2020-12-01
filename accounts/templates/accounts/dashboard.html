@@ -1,32 +1,93 @@
 {% extends 'accounts/main.html' %} {% block content %}
 <hr>
+<style>
+
+/*
+	Max width before this PARTICULAR table gets nasty. This query will take effect for any screen smaller than 760px and also iPads specifically.
+	*/
+	@media
+	  only screen 
+    and (max-width: 760px), (min-device-width: 768px) 
+    and (max-device-width: 1024px)  {
+
+		/* Force table to not be like tables anymore */
+		table, thead, tbody, th, td, tr {
+			display: block;
+		}
+
+		/* Hide table headers (but not display: none;, for accessibility) */
+		thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+    tr {
+      margin: 0 0 1rem 0;
+    }
+      
+    tr:nth-child(odd) {
+      background: #ccc;
+    }
+    
+		td {
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee;
+			position: relative;
+			padding-left: 50%;
+		}
+
+		td:before {
+			/* Now like a table header */
+			position: absolute;
+			/* Top/left values mimic padding */
+			top: 0;
+			left: 6px;
+			width: 45%;
+			padding-right: 10px;
+			white-space: nowrap;
+		}
+
+		/*
+		Label the data
+    You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
+		*/
+	
+
+	}
+</style>
 <div class="row" id='card'>
   <div class="col-sm-4">
     <div class="card winter-neva-gradient" id='heading'>
       <div class="card-body">
         <h5 class="card-title">Total ordered</h5>
         <hr>
-        <p class="card-text">{{num_orders}}</p>
+        <h3 class="card-text text-center"><b>{{num_orders}}</b></h3>
       </div>
     </div>
+    <br>
   </div>
+  
   <div class="col-sm-4">
     <div class="card winter-neva-gradient" id='heading'>
       <div class="card-body">
         <h5 class="card-title">Ordered Delivered</h5>
-        <hr />
-        <p class="card-text">{{delivered}}</p>
+        <hr >
+        <h3 class="card-text text-center"><b>{{delivered}}</b></h3>
       </div>
     </div>
+    <br>
   </div>
   <div class="col-sm-4">
     <div class="card winter-neva-gradient" id='heading'>
       <div class="card-body">
         <h5 class="card-title">Orders Pending</h5>
-        <hr />
-        <p class="card-text"><b>{{pend}}</b></p>
+        <hr>
+        <h3 class="card-text text-center"><b>{{pend}}</b></h3>
       </div>
     </div>
+    <br>
   </div>
 </div>
 <hr />
@@ -37,6 +98,7 @@
         <h5 class="card-title">customers</h5>
         <p class="card-text">Find all your customers here.</p>
         <hr>
+        <div class="table-responsive">
         <table class="table table-hover" style="overflow-x:auto;">
           <thead class='thead-light'>
             <tr>
@@ -55,20 +117,22 @@
             {% endfor %}
           </tbody>
         </table>
+        </div>
       </div>
   </div>
   <div class="col">
       <div class="card-body text-center">
         <h5 class="card-title">All orders</h5>
         <p class="card-text">Details of all the orders</p>
+        <div class="table-responsive">
         <table class="table table-hover" style="overflow-x:auto;">
           <thead class='thead-light' >
             <tr>
               <th scope="col">Product</th>
               <th scope="col-2">Date Ordered</th>
               <th scope="col">status</th>
+              <th>customer</th>
               <th>Update</th>
-              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -78,68 +142,20 @@
               <td>{{i.date_created}}</td>
               <td>{{i.status}}</td>
               <td>
-                <a href="{% url 'update' i.id %}" class="btn-sm dusty-grass-gradient">Update</a>
+               {{i.customer}}
               </td>
               <td>
-                <a href="{% url 'delete' i.id %}" class="btn-sm  ripe-malinka-gradient">Remove</a>
+                <a href="{% url 'update' i.id %}" class="btn-sm dusty-grass-gradient">Update</a>
+                <hr>
+                 <a href="{% url 'delete' i.id %}" class="btn-sm  ripe-malinka-gradient">Remove</a>
               </td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
 </div>
-
-<!--div  id="whitesmoke"class="card">
-  <div class="card-header">
-  </div>
-  <div class="card-body text-center">
-      <blockquote class="blockquote mb-0" >
-  <form>
-  <div class="form-group">
-    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="margin-bottom:15px;">
-      <button type="submit" class="btn btn-primary">Submit</button>
-  </div>
-
-  </form>
-
-    </blockquote>
-  </div>
-</div>
-</div>
-<div class="card text-center">
-  <div class="card-header">
-    
-  <div class="card-body">
-    <h5 class="card-title"></h5>
-      <table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col">Product</th>
-      <th scope="col">Category</th>
-      <th scope="col-2">Date Ordered</th>
-      <th scope="col">Status</th>
-        <th></th>
-        <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td></td>
-      <td></td>
-      <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-
-  </tbody>
-</table>
-  </div>
-    <hr>
-
-</div-->
 
 {% endblock %}

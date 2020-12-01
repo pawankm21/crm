@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, allowed_user
 from django.contrib.auth.models import Group
-
+from django.core.paginator import Paginator
 
 # Create your views here.
 @login_required(login_url='login')
@@ -22,6 +22,7 @@ def home(request):
     pending = Order.objects.filter(status='Pending').count()
     customer_filter =CustomerFilter(request.GET,queryset=customers)
     customers=customer_filter.qs
+    paginate_by =2
     context = {'Product': products, 'orders': orders, 'customers': customers, 'num_orders': num_orders,
                'delivered': delivered, 'pend': pending, 'customer_filter':customer_filter}
     return render(request, 'accounts/dashboard.html', context)
@@ -54,6 +55,16 @@ def products(request):
     products =product_filter.qs
     context = {'products': products,'product_filter':product_filter}
     return render(request, 'accounts/products.html', context)
+
+@login_required(login_url='login')
+def cart(request):
+    context={}
+    return render(request, 'accounts/cart.html',context)
+
+@login_required(login_url='login')
+def checkout(request):
+    context={}
+    return render(request,'accounts/checkout.html',context)
 
 
 @login_required(login_url='login')
@@ -151,6 +162,7 @@ def user(request):
         customer = request.user.customer
         total = orders.count()
         my_filter = OrderFilter(request.GET, queryset=orders)
+        orders=my_filter.qs
     except:
         orders = None
         customer = request.user.customer

@@ -1,17 +1,10 @@
 {% extends 'accounts/main.html' %}
 {% block content %}
+{% load static %}
 <section>
   <hr>
 </section>
-<style>
-	.profile-pic{
-		max-width: 200px;
-		max-height:200px;
-		margin: 0 auto;
-		border-radius: 100%;
-    
-	}
-</style>
+<link rel="stylesheet" href=" {% static 'css/user.css' %} ">
 <div class="text-center">
     <div class="card card-cascade narrower cloudy-knoxville-gradient">
 

@@ -8,12 +8,15 @@ class OrderFilter(django_filters.FilterSet):
     start_date = DateFilter(field_name='date_created',lookup_expr='gte',widget=TextInput(attrs={'placeholder':'Ordered after'}))
     end_date = DateFilter(field_name='date_created',lookup_expr='lte',widget=TextInput(attrs={'placeholder':'Ordered before'}))
     status =ChoiceFilter(field_name='status',choices=Order.STATUS,label='none')
-    name =django_filters.CharFilter(field_name='name',lookup_expr='icontains',widget=TextInput(attrs={'placeholder':'Product name'}))
+   
     class Meta:
         model = Order
-        fields = ('name','start_date',
+        fields = (
+            'product',
+        'start_date',
         'end_date',
         'status',
+    
         
         )
        

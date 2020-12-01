@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, allowed_user
 from django.contrib.auth.models import Group
-from django.core.paginator import Paginator
+
 
 # Create your views here.
 @login_required(login_url='login')
@@ -46,6 +46,14 @@ def customer(request, pk):
     context = {'orders': orders, 'customer': customer, 'latest': latest, 'total': total, 'my_filter': my_filter}
     return render(request, 'accounts/customer.html', context)
 
+
+@login_required(login_url='login')
+def products(request):
+    products = Product.objects.all()
+    product_filter=ProductFilter(request.GET,queryset=products)
+    products =product_filter.qs
+    context = {'products': products,'product_filter':product_filter}
+    return render(request, 'accounts/products.html', context)
 
 
 @login_required(login_url='login')
@@ -143,7 +151,6 @@ def user(request):
         customer = request.user.customer
         total = orders.count()
         my_filter = OrderFilter(request.GET, queryset=orders)
-        orders=my_filter.qs
     except:
         orders = None
         customer = request.user.customer

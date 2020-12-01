@@ -22,7 +22,6 @@ def home(request):
     pending = Order.objects.filter(status='Pending').count()
     customer_filter =CustomerFilter(request.GET,queryset=customers)
     customers=customer_filter.qs
-    paginate_by =2
     context = {'Product': products, 'orders': orders, 'customers': customers, 'num_orders': num_orders,
                'delivered': delivered, 'pend': pending, 'customer_filter':customer_filter}
     return render(request, 'accounts/dashboard.html', context)
@@ -47,24 +46,6 @@ def customer(request, pk):
     context = {'orders': orders, 'customer': customer, 'latest': latest, 'total': total, 'my_filter': my_filter}
     return render(request, 'accounts/customer.html', context)
 
-
-@login_required(login_url='login')
-def products(request):
-    products = Product.objects.all()
-    product_filter=ProductFilter(request.GET,queryset=products)
-    products =product_filter.qs
-    context = {'products': products,'product_filter':product_filter}
-    return render(request, 'accounts/products.html', context)
-
-@login_required(login_url='login')
-def cart(request):
-    context={}
-    return render(request, 'accounts/cart.html',context)
-
-@login_required(login_url='login')
-def checkout(request):
-    context={}
-    return render(request,'accounts/checkout.html',context)
 
 
 @login_required(login_url='login')
